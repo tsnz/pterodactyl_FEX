@@ -1,0 +1,82 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-11-25T12:36:32+00:00",
+    "name": "Enshrouded FEX ARM64",
+    "author": "12860133+tsnz@users.noreply.github.com",
+    "description": "Enshrouded on ARM64 using FEX & Proton\r\nRequires ports 15636 & 15637 by default.",
+    "features": null,
+    "docker_images": {
+        "FEX Runner": "ghcr.io\/tsnz\/fex_runner:latest"
+    },
+    "file_denylist": [],
+    "startup": "IndirectSteamServerStart.sh  -x \"enshrouded_serv\" -l $HOME\/server\/logs\/enshrouded_server.log -c \"FEX $HOME\/proton\/$PROTON_VERSION\/proton run $HOME\/server\/enshrouded_server.exe\" -s SIGINT",
+    "config": {
+        "files": "{\r\n    \"server\/enshrouded_server.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {}\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"[Session] 'PrepareGame' (up)!\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\nset -e\r\n\r\n# symlink home dir for installation\r\nln -s \/mnt\/server \/home\/container\r\nexport HOME=\/home\/container\r\ncd $HOME\r\n\r\n# install proton\r\n\/usr\/local\/bin\/InstallProton.sh -t $PROTON_VERSION -d $HOME\/proton\r\nmkdir -p $STEAM_COMPAT_DATA_PATH\r\n\r\n# download and extract a RootFS for FEX\r\n[ -d $HOME\/.fex-emu\/RootFS ] && rm -rf $HOME\/.fex-emu\/RootFS\r\nFEXRootFSFetcher -y -x --distro-name ubuntu --distro-version 24.04\r\n\r\n# after setting up FEX, use it to set up SteamCMD and download the server files\r\n\/usr\/local\/bin\/InstallSteamCMD.sh -d $STEAMCMD_PATH\r\nFEX $STEAMCMD_PATH\/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir $HOME\/server +login anonymous +app_update $APP_ID +quit",
+            "container": "ghcr.io\/tsnz\/fex_installer:latest",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Proton Repo API URL",
+            "description": "API URL for Proton GitHub repo",
+            "env_variable": "PROTON_REPO_API_URL",
+            "default_value": "https:\/\/api.github.com\/repos\/GloriousEggroll\/proton-ge-custom",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|url",
+            "field_type": "text"
+        },
+        {
+            "name": "Proton Version",
+            "description": "Proton version git tag",
+            "env_variable": "PROTON_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|alpha_dash",
+            "field_type": "text"
+        },
+        {
+            "name": "Steam App ID",
+            "description": "Steam App ID",
+            "env_variable": "APP_ID",
+            "default_value": "2278520",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|numeric",
+            "field_type": "text"
+        },
+        {
+            "name": "Auto Update",
+            "description": "Automatically update on server start",
+            "env_variable": "AUTO_UPDATE",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Force Win Platform",
+            "description": "Force SteamCMD to download the Windows server files",
+            "env_variable": "FORCE_WIN",
+            "default_value": "1",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|boolean",
+            "field_type": "text"
+        }
+    ]
+}

@@ -1,0 +1,43 @@
+name: Docker Images CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: "0 0 1,15 * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      packages: write
+      contents: read
+    
+    steps:
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        uses: actions/checkout@v4
+      - 
+        name: Build and push the FEX installer image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: "{{defaultContext}}:docker"
+          file: "fex_installer/Dockerfile"
+          tags: "ghcr.io/${{ github.repository_owner }}/fex_installer:latest"
+      - 
+        name: Build and push the FEX runner image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: "{{defaultContext}}:docker"
+          file: "fex_runner/Dockerfile"
+          tags: "ghcr.io/${{ github.repository_owner }}/fex_runner:latest"
