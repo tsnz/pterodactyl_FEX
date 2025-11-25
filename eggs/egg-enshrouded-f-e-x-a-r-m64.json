@@ -4,10 +4,10 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2025-11-25T12:36:32+00:00",
+    "exported_at": "2025-11-25T21:16:14+00:00",
     "name": "Enshrouded FEX ARM64",
     "author": "12860133+tsnz@users.noreply.github.com",
-    "description": "Enshrouded on ARM64 using FEX & Proton\r\nRequires ports 15636 & 15637 by default.",
+    "description": "Enshrouded on ARM64 using FEX & Proton\r\nRequires ports 15636 & 15637 by default.\r\n\r\nhttps:\/\/github.com\/tsnz\/pterodactyl_FEX",
     "features": null,
     "docker_images": {
         "FEX Runner": "ghcr.io\/tsnz\/fex_runner:latest"
@@ -22,7 +22,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\nset -e\r\n\r\n# symlink home dir for installation\r\nln -s \/mnt\/server \/home\/container\r\nexport HOME=\/home\/container\r\ncd $HOME\r\n\r\n# install proton\r\n\/usr\/local\/bin\/InstallProton.sh -t $PROTON_VERSION -d $HOME\/proton\r\nmkdir -p $STEAM_COMPAT_DATA_PATH\r\n\r\n# download and extract a RootFS for FEX\r\n[ -d $HOME\/.fex-emu\/RootFS ] && rm -rf $HOME\/.fex-emu\/RootFS\r\nFEXRootFSFetcher -y -x --distro-name ubuntu --distro-version 24.04\r\n\r\n# after setting up FEX, use it to set up SteamCMD and download the server files\r\n\/usr\/local\/bin\/InstallSteamCMD.sh -d $STEAMCMD_PATH\r\nFEX $STEAMCMD_PATH\/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir $HOME\/server +login anonymous +app_update $APP_ID +quit",
+            "script": "#!\/bin\/bash\r\nset -e\r\n\r\n# symlink home dir for installation\r\nln -s \/mnt\/server \/home\/container\r\nexport HOME=\/home\/container\r\ncd $HOME\r\n\r\n# install proton\r\n\/usr\/local\/bin\/InstallProton.sh -t $PROTON_VERSION -d $HOME\/proton\r\nmkdir -p $STEAM_COMPAT_DATA_PATH\r\n\r\n# Check CPU Feature Version, warn user if there is a mismatch\r\nCheckCPUFeatureVersionMismatch.sh\r\n\r\n# download and extract a RootFS for FEX\r\n[ -d $HOME\/.fex-emu\/RootFS ] && rm -rf $HOME\/.fex-emu\/RootFS\r\nFEXRootFSFetcher -y -x --distro-name ubuntu --distro-version 24.04\r\n\r\n# after setting up FEX, use it to set up SteamCMD and download the server files\r\n\/usr\/local\/bin\/InstallSteamCMD.sh -d $STEAMCMD_PATH\r\nFEX $STEAMCMD_PATH\/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir $HOME\/server +login anonymous +app_update $APP_ID +quit",
             "container": "ghcr.io\/tsnz\/fex_installer:latest",
             "entrypoint": "bash"
         }

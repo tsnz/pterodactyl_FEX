@@ -45,7 +45,7 @@ FEXBash "$dir/steamcmd.sh +quit"
 
 # Create links needed for proton
 mkdir -p "$HOME/.steam"
-ln -sf "$(realpath --no-symlinks "$dir")/linux64" "$HOME/.steam/sdk64"
+ln -sfT "$(realpath --no-symlinks "$dir")/linux64" "$HOME/.steam/sdk64"
 ln -sf "./steamclient.so" "$dir/linux64/steamservice.so"
-ln -sf "$(realpath --no-symlinks "$dir")/linux32" "$HOME/.steam/sdk32"
+ln -sfT "$(realpath --no-symlinks "$dir")/linux32" "$HOME/.steam/sdk32"
 ln -sf "./steamclient.so" "$dir/linux32/steamservice.so"

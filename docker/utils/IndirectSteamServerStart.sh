@@ -70,9 +70,9 @@ if [ -z "$terminate_signal" ]; then
 fi
 
 # Check if auto update is enabled
-if [ "$AUTO_UPDATE" -eq 1 ]; then
+if [ "$AUTO_UPDATE" = "1" ]; then
     echo "Auto Update enabled, updating server"
-    if ! FEX "$STEAMCMD_PATH"/steamcmd.sh "$( [ "$FORCE_WIN" -eq 1 ] &&  printf '+@sSteamCmdForcePlatformType windows' )" \
+    if ! FEX "$STEAMCMD_PATH"/steamcmd.sh "$( [ "$FORCE_WIN" = "1" ] &&  printf '+@sSteamCmdForcePlatformType windows' )" \
       +force_install_dir "$HOME"/server +login anonymous +app_update "$APP_ID" +quit; then
         echo "Error while updating server, continuing without updating. Restart server to try again."
     fi
@@ -82,7 +82,7 @@ fi
 echo "Executing: $start_command"
 $start_command &
 
-for try in {1..12}; do
+for try in {1..18}; do
     # Only use first PID if multiple exist
     echo "Try $try to find server executable"
         pid="$(pgrep -x "$executable" | head -1)"

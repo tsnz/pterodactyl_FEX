@@ -103,6 +103,10 @@ def GetCPUFeaturesVersion():
     v8_3Mandatory = v8_2Mandatory + ["fcma", "jscvt", "lrcpc", "paca", "pacg"]
     v8_4Mandatory = v8_3Mandatory + ["asimddp", "flagm", "ilrcpc", "uscat"]
 
+    CPU_FEATURE_OVERRIDE = os.getenv("CPU_FEATURE_OVERRIDE")
+    if CPU_FEATURE_OVERRIDE:
+        _ArchVersion = CPU_FEATURE_OVERRIDE
+
     #  fphp asimdhp asimddp
 
     if _ArchVersion == None:

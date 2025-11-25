@@ -1,7 +1,11 @@
 #!/bin/bash
+set -e
 
 # Switch to the container's working directory
 cd /home/container || exit 1
+
+# Check CPU Feature Version, warn user if there is a mismatch
+CheckCPUFeatureVersionMismatch.sh
 
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
 # variable format of "$VARIABLE"

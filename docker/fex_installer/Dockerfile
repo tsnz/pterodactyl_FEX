@@ -7,6 +7,8 @@ RUN     apt update && apt upgrade -y  \
             && apt install -y  --no-install-recommends ca-certificates python3 curl sudo software-properties-common jq
             
 # Install FEX without a RootFS, RootFS will be installed by installer script
+ARG     CPU_FEATURE_OVERRIDE
+ENV     CPU_FEATURE_OVERRIDE=$CPU_FEATURE_OVERRIDE
 COPY    ./utils/InstallFEX.py /usr/local/bin/InstallFEX.py
 RUN     python3 /usr/local/bin/InstallFEX.py \
             && rm -rf /var/lib/apt/lists/*
@@ -14,6 +16,8 @@ RUN     python3 /usr/local/bin/InstallFEX.py \
 # Copy more installer
 COPY    ./utils/InstallProton.sh /usr/local/bin/InstallProton.sh
 COPY    ./utils/InstallSteamCMD.sh /usr/local/bin/InstallSteamCMD.sh
+COPY    ./utils/CheckCPUFeatureVersionMismatch.sh /usr/local/bin/CheckCPUFeatureVersionMismatch.sh
+COPY    ./utils/GetCPUFeaturesVersion.py /usr/local/bin/GetCPUFeaturesVersion.py
 
 # Add ENV vars for installation
 ENV     STEAMCMD_PATH=/home/container/Steam

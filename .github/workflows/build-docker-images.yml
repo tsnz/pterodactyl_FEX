@@ -32,7 +32,10 @@ jobs:
           push: true
           context: "{{defaultContext}}:docker"
           file: "fex_installer/Dockerfile"
-          tags: "ghcr.io/${{ github.repository_owner }}/fex_installer:latest"
+          tags: |
+            "ghcr.io/${{ github.repository_owner }}/fex_installer:latest"
+            "ghcr.io/${{ github.repository_owner }}/fex_installer:ARMv8.2"
+          build-args: CPU_FEATURE_OVERRIDE=8.2
       - 
         name: Build and push the FEX runner image
         uses: docker/build-push-action@v6
@@ -40,4 +43,7 @@ jobs:
           push: true
           context: "{{defaultContext}}:docker"
           file: "fex_runner/Dockerfile"
-          tags: "ghcr.io/${{ github.repository_owner }}/fex_runner:latest"
+          tags: |
+            "ghcr.io/${{ github.repository_owner }}/fex_runner:latest"
+            "ghcr.io/${{ github.repository_owner }}/fex_runner:ARMv8.2"
+          build-args: CPU_FEATURE_OVERRIDE=8.2
